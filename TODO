@@ -1,4 +1,3 @@
-* Serve a HTML page
 * Set up event source
 - write server event source
 - write client event sink

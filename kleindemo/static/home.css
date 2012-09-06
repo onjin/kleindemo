@@ -1,0 +1,6 @@
+.instructions {
+    background: #AAA;
+    border: medium #AAA outset;
+    padding: 0.5em;
+    font: italic;
+}
