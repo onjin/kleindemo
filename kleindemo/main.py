@@ -24,10 +24,14 @@ def events(request):
 
 
 def ticker(request, n=0):
-    """Send a tick event and schedule the next tick."""
-    request.write('data: Tick %s\n\n' % (n,))
-    reactor.callLater(1, ticker, request, n+1)    
-    
-    
+    """Send a tick event and schedule the next tick.
+
+    (As long as the request is connected.)
+    """
+    if not request.transport.disconnected:
+        request.write('data: Tick %s\n\n' % (n,))
+        reactor.callLater(1, ticker, request, n+1)    
+
+
 if __name__ == '__main__':
     run("localhost", 8081)
