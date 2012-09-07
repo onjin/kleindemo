@@ -1,0 +1,14 @@
+Lessons learned from this:
+
+- Trailing slashes on routes are important!  A request for /static/foo.css
+  will be handled by a route for '/static/' but not '/static'.
+
+- Returning File('static/main.html') doesn't work, due to the one open bug
+  klein has right now: https://github.com/twisted/klein/issues/2
+  Currently our handler for / is working around that by reading the file
+  itself.
+
+- Calling request.write() after the client has disconnected does not produce
+  an error.  There is no deferred or other return value from write().  In
+  commit 7aef2aef we check request.transport.disconnected, but it might be
+  more proper to use request.notifyFinish.

@@ -1,12 +1,15 @@
-* Set up event source
-- write server event source
-- write client event sink
+* Publish moves through the event source
+- keep a list of connections
+
+* Render moves on client
 
 * Send moves to the server
 - write server method (log data only)
 - write javascript post method
 
-* Publish moves through the event source
-- keep a list of connections
-
-* Render moves on client
+* Deploy
+- get repeatable deployment script (requirements.txt?)
+- set up hosting account
+- deploy on account
+- point domain name
+- maybe use subdomain for eventsource?
