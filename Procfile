@@ -1,1 +1,1 @@
-web: twistd -n web --port=$PORT --class=kleindemo.main.resource
+web: twistd -n --reactor=epoll web --port=$PORT --class=kleindemo.main.resource
