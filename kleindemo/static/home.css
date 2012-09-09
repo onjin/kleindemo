@@ -1,6 +1,23 @@
 .instructions {
-    background: #AAA;
-    border: medium #AAA outset;
+    float: right;
+    background-color: rgba(170, 170, 170, 0.66);
+    border: medium rgba(170, 170, 170, 0.66) outset;
     padding: 0.5em;
     font: italic;
+}
+
+body, html {
+    height: 100%;
+    background: #888;
+    margin: 0;
+}
+
+#playingField {
+    height: 100%;
+    width: 100%;
+    background: #088;
+    /* Making sure there is no padding or border will help reduce confusion browsers have about what
+     * offset coordinates are relative to. */
+    border: 0;
+    padding: 0;
 }

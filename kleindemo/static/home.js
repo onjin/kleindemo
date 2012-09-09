@@ -3,6 +3,8 @@
 kleindemo = (function ($) {
     "use strict";
 
+    var fieldSize = {width: null, height: null};
+
     var handleMessage = function (message) {
         // console.log(message.data);
     };
@@ -23,9 +25,18 @@ kleindemo = (function ($) {
         return id;
     };
 
+    var handleClick = function (evt) {
+        return sendMove(evt.offsetX / fieldSize.width, evt.offsetY / fieldSize.height);
+    };
+
     var main = function () {
         var source = new EventSource('events');
         source.addEventListener('message', handleMessage);
+
+        var $playingField = $("#playingField");
+        $playingField.click(handleClick);
+        fieldSize.width = $playingField.width();
+        fieldSize.height = $playingField.height();
     };
 
     return {
