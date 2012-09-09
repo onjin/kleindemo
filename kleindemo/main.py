@@ -1,20 +1,22 @@
 import json
 from klein import run, route
+from twisted.python.util import sibpath
 from twisted.web.static import File
 from twisted.internet import defer
 
+STATIC_DIR = sibpath(__file__, 'static/')
 
 spectators = set()
 
 @route('/static/')
 def static(request):
-    return File("./static")
+    return File(STATIC_DIR)
 
 
 
 @route('/')
 def home(request):
-    with file('./static/home.html') as f:
+    with file(STATIC_DIR + 'home.html') as f:
         return f.read()
 
 
@@ -65,3 +67,8 @@ if __name__ == '__main__':
     import os
     port = os.environ.get('VCAP_APP_PORT', '8081')
     run('', int(port))
+else:
+    #noinspection PyUnresolvedReferences
+    from klein import resource
+    # now invoke server like this:
+    # twistd -n web --class=kleindemo.main.resource
