@@ -6,7 +6,7 @@ kleindemo = (function ($) {
     var fieldSize = {width: null, height: null};
 
     var handleMessage = function (message) {
-        // console.log(message.data);
+        console.log(message.data);
     };
 
     var sendMove = function (x, y) {

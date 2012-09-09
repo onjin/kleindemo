@@ -1,11 +1,4 @@
-* Publish moves through the event source
-- keep a list of connections
-
 * Render moves on client
-
-* Send moves to the server
-- write server method (log data only)
-- write javascript post method
 
 * Deploy
 - get repeatable deployment script (requirements.txt?)
@@ -13,3 +6,6 @@
 - deploy on account
 - point domain name
 - maybe use subdomain for eventsource?
+
+* Keepalives
+- heroku will time out the request if it the response isn't written soon or if there's not more data every 55 seconds

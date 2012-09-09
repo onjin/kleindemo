@@ -1,7 +1,10 @@
+import json
 from klein import run, route
 from twisted.web.static import File
 from twisted.internet import defer, reactor
 
+
+spectators = set()
 
 @route('/static/')
 def static(request):
@@ -19,7 +22,7 @@ def home(request):
 @route('/events')
 def events(request):
     request.setHeader('Content-type', 'text/event-stream')
-    ticker(request)
+    spectators.add(request)
     # Indicate we're not done with this request by returning a deferred.
     # (In fact, this deferred will never fire.)
     return defer.Deferred()
@@ -35,18 +38,27 @@ def move(request):
     player = request.args['player'][0]
     x = float(request.args['x'][0])
     y = float(request.args['y'][0])
-    print "%s moving to %r, %r" % (player, x, y)
+
+    dropouts = []
+    for spectator in spectators:
+        if not spectator.transport.disconnected:
+            spectator.write(sseMsg({'player': player, 'x': x, 'y': y}))
+        else:
+            # can't change spectators while we're iterating over it
+            dropouts.append(spectator)
+
+    for dropout in dropouts:
+        spectators.remove(dropout)
 
 
 
-def ticker(request, n=0):
-    """Send a tick event and schedule the next tick.
+def sseMsg(data):
+    """Format a Sever-Sent-Event message."""
+    jsonData = json.dumps(data)
+    # It's possible to deal with newlines in data, but we don't have to yet.
+    assert '\n' not in jsonData
+    return 'data: %s\n\n' % (jsonData,)
 
-    (As long as the request is connected.)
-    """
-    if not request.transport.disconnected:
-        request.write('data: Tick %s\n\n' % (n,))
-        reactor.callLater(1, ticker, request, n+1)    
 
 
 if __name__ == '__main__':
