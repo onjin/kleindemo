@@ -3,10 +3,44 @@
 kleindemo = (function ($) {
     "use strict";
 
+    var AVATAR_WIDTH = 80, AVATAR_HEIGHT = 80;
+
     var fieldSize = {width: null, height: null};
 
-    var handleMessage = function (message) {
-        console.log(message.data);
+    var players = {};
+
+    var newPlayer = function (playerID) {
+        console.log("A Challenger Appears: " + playerID);
+
+        var $player = $('<img />', {
+            'class': 'player',
+            id: 'player-' + playerID,
+            src: 'http://www.gravatar.com/avatar/' + playerID + '?d=monsterid'
+        });
+        if (playerID === kleindemo.id) {
+            $player.addClass('you');
+        }
+        $player.appendTo('#playingField').css({'position': 'absolute'});
+        players[playerID] = $player;
+        return $player;
+    };
+
+    var receiveMove = function (jsonmsg) {
+        var msg = $.parseJSON(jsonmsg.data);
+
+        var playerID = msg.player;
+        var $player = players[playerID];
+        if (!$player) {
+            $player = newPlayer(playerID);
+        }
+        var centerX = msg.x * fieldSize.width;
+        var centerY = msg.y * fieldSize.height;
+
+        $player.stop(true);
+        $player.animate({
+            left: centerX - AVATAR_WIDTH / 2,
+            top: centerY - AVATAR_HEIGHT / 2
+        }, 'fast');
     };
 
     var sendMove = function (x, y) {
@@ -26,12 +60,12 @@ kleindemo = (function ($) {
     };
 
     var handleClick = function (evt) {
-        return sendMove(evt.offsetX / fieldSize.width, evt.offsetY / fieldSize.height);
+        return sendMove(evt.pageX / fieldSize.width, evt.pageY / fieldSize.height);
     };
 
     var main = function () {
         var source = new EventSource('events');
-        source.addEventListener('message', handleMessage);
+        source.addEventListener('message', receiveMove);
 
         var $playingField = $("#playingField");
         $playingField.click(handleClick);
