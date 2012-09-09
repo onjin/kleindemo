@@ -49,12 +49,24 @@ kleindemo = (function ($) {
         });
     };
 
+
+    /* from http://stackoverflow.com/a/5158301/9585 */
+    function getParameterByName(name) {
+        var match = new RegExp('[?&]' + name + '=([^&]*)')
+            .exec(window.location.search);
+        return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+    }
+
     var generateRandomID = function () {
         var id = '';
         for (var i = 32; i > 0; i--) {
             id += Math.floor(Math.random() * 16).toString(16);
         }
         return id;
+    };
+
+    var myID = function () {
+        return getParameterByName('id') || generateRandomID();
     };
 
     var handleClick = function (evt) {
@@ -78,7 +90,7 @@ kleindemo = (function ($) {
     };
 
     return {
-        id: generateRandomID(),
+        id: myID(),
         main: main,
         sendMove: sendMove
     };
