@@ -1,7 +1,7 @@
 import json
 from klein import run, route
 from twisted.web.static import File
-from twisted.internet import defer, reactor
+from twisted.internet import defer
 
 
 spectators = set()
@@ -62,4 +62,4 @@ def sseMsg(data):
 
 
 if __name__ == '__main__':
-    run("localhost", 8081)
+    run('', 8081)
