@@ -12,3 +12,7 @@ Lessons learned from this:
   an error.  There is no deferred or other return value from write().  In
   commit 7aef2aef we check request.transport.disconnected, but it might be
   more proper to use request.notifyFinish.
+
+- I got the server to start on AppFog by using the Standalone Python framework
+  and having the server listen on the port VCAP_APP_PORT, but it the Server-
+  Sent Events requests didn't go through.

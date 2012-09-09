@@ -62,4 +62,6 @@ def sseMsg(data):
 
 
 if __name__ == '__main__':
-    run('', 8081)
+    import os
+    port = os.environ.get('VCAP_APP_PORT', '8081')
+    run('', int(port))
