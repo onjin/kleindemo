@@ -21,3 +21,8 @@ body, html {
     border: 0;
     padding: 0;
 }
+
+.player {
+    border-radius: 100%;
+    box-shadow: 3px 3px 12px black;
+}
