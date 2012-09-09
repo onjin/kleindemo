@@ -1,17 +1,19 @@
 from klein import run, route
-from twisted.web.server import NOT_DONE_YET
 from twisted.web.static import File
 from twisted.internet import defer, reactor
+
 
 @route('/static/')
 def static(request):
     return File("./static")
 
 
+
 @route('/')
 def home(request):
     with file('./static/home.html') as f:
         return f.read()
+
 
 
 @route('/events')
@@ -21,6 +23,20 @@ def events(request):
     # Indicate we're not done with this request by returning a deferred.
     # (In fact, this deferred will never fire.)
     return defer.Deferred()
+
+
+
+@route('/move')
+def move(request):
+    """
+
+    :type request: twisted.web.http.Request
+    """
+    player = request.args['player'][0]
+    x = float(request.args['x'][0])
+    y = float(request.args['y'][0])
+    print "%s moving to %r, %r" % (player, x, y)
+
 
 
 def ticker(request, n=0):
