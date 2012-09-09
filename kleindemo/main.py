@@ -24,9 +24,15 @@ def home(request):
 @route('/events')
 def events(request):
     request.setHeader('Content-type', 'text/event-stream')
+
+    # When we're running under heroku, it likes to know we've received the
+    # request and aren't falling asleep on the job, so write something out
+    # immediately.
+    request.write(sseMsg('hello', 'keepalive'))
+
+    # We'll send more later as events happen.  Indicate we're not done with this
+    # request by returning a deferred. (In fact, this deferred will never fire.)
     spectators.add(request)
-    # Indicate we're not done with this request by returning a deferred.
-    # (In fact, this deferred will never fire.)
     return defer.Deferred()
 
 
@@ -44,7 +50,7 @@ def move(request):
     dropouts = []
     for spectator in spectators:
         if not spectator.transport.disconnected:
-            spectator.write(sseMsg({'player': player, 'x': x, 'y': y}))
+            spectator.write(sseMsg({'player': player, 'x': x, 'y': y}, "move"))
         else:
             # can't change spectators while we're iterating over it
             dropouts.append(spectator)
@@ -54,12 +60,19 @@ def move(request):
 
 
 
-def sseMsg(data):
+def sseMsg(data, name=None):
     """Format a Sever-Sent-Event message."""
     jsonData = json.dumps(data)
     # It's possible to deal with newlines in data, but we don't have to yet.
     assert '\n' not in jsonData
-    return 'data: %s\n\n' % (jsonData,)
+
+    if name:
+        output = 'event: %s\n' % (name,)
+    else:
+        output = ''
+
+    output += 'data: %s\n\n' % (jsonData,)
+    return output
 
 
 

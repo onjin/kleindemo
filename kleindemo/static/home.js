@@ -10,8 +10,6 @@ kleindemo = (function ($) {
     var players = {};
 
     var newPlayer = function (playerID) {
-        console.log("A Challenger Appears: " + playerID);
-
         var $player = $('<img />', {
             'class': 'player',
             id: 'player-' + playerID,
@@ -65,7 +63,13 @@ kleindemo = (function ($) {
 
     var main = function () {
         var source = new EventSource('events');
-        source.addEventListener('message', receiveMove);
+        source.addEventListener('move', receiveMove);
+
+        // For debugging when these event connections open and close.
+        if (window.console) {
+            source.addEventListener('open', function (m) {console.log(m)});
+            source.addEventListener('error', function (m) {console.log(m)});
+        }
 
         var $playingField = $("#playingField");
         $playingField.click(handleClick);

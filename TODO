@@ -1,9 +1,2 @@
-* Deploy
-- get repeatable deployment script (requirements.txt?)
-- set up hosting account
-- deploy on account
-- point domain name
-- maybe use subdomain for eventsource?
-
 * Keepalives
 - heroku will time out the request if it the response isn't written soon or if there's not more data every 55 seconds
