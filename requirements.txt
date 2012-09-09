@@ -1,0 +1,7 @@
+Twisted==12.2.0
+Werkzeug==0.8.3
+argparse==1.2.1
+-e git://github.com/twisted/klein.git#egg=klein-dev
+mock==1.0b1
+wsgiref==0.1.2
+zope.interface==4.0.1
