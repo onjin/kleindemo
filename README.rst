@@ -1,4 +1,6 @@
-kleindemo
-=========
+Klein Demo
+==========
 
-demonstration the Klein web framework
+A demonstration of Klein_.
+
+.. _Klein: https://github.com/twisted/klein
