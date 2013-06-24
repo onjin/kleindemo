@@ -9,7 +9,7 @@ STATIC_DIR = sibpath(__file__, 'static/')
 spectators = set()
 
 
-@route('/static/')
+@route('/static/', branch=True)
 def static(request):
     """All requests to /static/* are static files from this directory."""
     return File(STATIC_DIR)
